@@ -9,41 +9,55 @@
     </head>
     <body>
         <div id ="root">
-            <div>{{word}}</div>
-            <form v-on:submit="onSubmitForm">
-                <input type="text" ref="answer" v-model='value'>
-                <button type="submit">입력!</button>
-            </form>
-                <div>{{result}}</div>
+            <word-relay start-word="제로초"></word-relay>
+            <word-relay start-word="초밥"></word-relay>
+            <word-relay start-word="밥버거"></word-relay>
         </div>
+        <script>
+            Vue.component('wordRelay',{    //전역 컴포넌트
+                template :`
+                        <div>
+                            <div>{{word}}</div>
+                                <form v-on:submit="onSubmitForm">
+                                    <input type="text" ref="answer" v-model='value'>
+                                    <button type="submit">입력!</button>
+                                </form>
+                            <div>{{result}}</div>
+                        </div>
+                `,
+                props: ['startWord'],
+                data () {
+                    console.log(this);
+                    return{
+                        word : this.startWord,
+                        result: '',
+                        value: '',
+                    }
+                },
+                methods: {
+                    onSubmitForm(e){
+                        e.preventDefault();
+                        if(this.word[this.word.length -1] === this.value[0]){
+                            this.result = '딩동댕';
+                            this.word = this.value;
+                            this.value = '';
+                            this.$refs.answer.focus();
+                        }else{
+                            this.result = '땡';
+                            this.value ='';
+                            this.$refs.answer.focus();
+                        }
+                    }
+                }
+            })
+        </script>
         <script>
 
             const app = new Vue({
             el: '#root',
-            data: {
-                word : '제로초',
-                result: '',
-                value: '',
-            },
-            methods: {
-                onSubmitForm(e){
-                    e.preventDefault();
-                    if(this.word[this.word.length -1] === this.value[0]){
-                        this.result = '딩동댕';
-                        this.word = this.value;
-                        this.value = '';
-                        this.$refs.answer.focus();
-                    }else{
-                        this.result = '땡 씹새꺄 ㅋㅋ';
-                        this.value ='';
-                        this.$refs.answer.focus();
-                    }
-                }
-            },
         });
 
-            //v-model,preventDefault 찾아보자
-
+            //component : 같은 것을 렌더링 하지만 중복을 제거하는 역할. Data들은 다 따로따로 논다.
         </script>
     </body>
 </html>
